@@ -649,20 +649,19 @@
         <div class="header">
             <h1>🌳 בונה עץ יוחסין מתקדם 🌳</h1>
             
-            <div id="saveStatus" style="text-align: center; padding: 10px; margin: 10px 0; border-radius: 8px; font-weight: bold; display: none;">
-                <span id="saveStatusText"></span>
-            </div>
-            
             <div class="controls">
                 <button class="btn" onclick="toggleTreeManager()">📁 ניהול עצים</button>
                 <button class="btn btn-export" onclick="showPDFSettings()">📄 ייצא PDF</button>
                 <button class="btn" onclick="toggleNamesList()">👥 רשימת שמות</button>
                 <button class="btn btn-settings" onclick="toggleSettings()">⚙️ הגדרות</button>
+                <button class="btn" onclick="setupAutoSave()" id="autoSaveBtn" style="background: #4CAF50;">🔒 הפעל שמירה אוטומטית</button>
                 <button class="btn" onclick="saveToJSON()">💾 שמור</button>
                 <button class="btn" onclick="loadFromJSON()">📂 טען</button>
                 <button class="btn" onclick="saveToGoogleDrive()" title="שמור לגוגל דרייב">☁️ שמור לדרייב</button>
                 <button class="btn btn-clear" onclick="clearTree()">🗑️ נקה</button>
             </div>
+            
+            <div id="autoSaveStatus" style="display: none; text-align: center; padding: 10px; margin: 10px 0; border-radius: 8px; font-weight: bold;"></div>
             
             
             <div id="treeManagerPanel" class="settings-panel" style="display: none;">
@@ -2365,17 +2364,17 @@
             }
         }
         
-        // ============================================
-        // File System API - Auto Save to Computer
-        // ============================================
+        // ================================
+        // Auto-Save System (Simple)
+        // ================================
         let fileHandle = null;
-        let autoSaveInterval = null;
-        let hasUnsavedChanges = false;
+        let autoSaveTimer = null;
+        let hasChanges = false;
         
-        async function setupFileSystemSave() {
+        async function setupAutoSave() {
             if (!('showDirectoryPicker' in window)) {
-                updateSaveStatus('⚠️ שמירה ידנית בלבד - לחץ "שמור" לפני סגירה!', 'warning');
-                return false;
+                alert('⚠️ הדפדפן שלך לא תומך בשמירה אוטומטית.\n\nהשתמש ב-Chrome או Edge, או לחץ "שמור" ידנית לפני סגירה.');
+                return;
             }
             
             try {
@@ -2385,133 +2384,87 @@
                 });
                 
                 fileHandle = await dirHandle.getFileHandle('yichus_tree.json', { create: true });
-                localStorage.setItem('fileSystemEnabled', 'true');
                 
-                startAutoSave();
-                updateSaveStatus('💚 שמירה אוטומטית פעילה!', 'success');
-                return true;
+                document.getElementById('autoSaveBtn').textContent = '✅ שמירה אוטומטית פעילה';
+                document.getElementById('autoSaveBtn').style.background = '#28a745';
+                
+                showAutoSaveStatus('💚 שמירה אוטומטית הופעלה!', 'success');
+                
+                startAutoSaveTimer();
+                await saveToFile();
+                
             } catch (err) {
                 if (err.name !== 'AbortError') {
-                    console.error('File System Error:', err);
+                    alert('שגיאה: ' + err.message);
                 }
-                updateSaveStatus('⚠️ לחץ "שמור" לפני סגירה!', 'warning');
-                return false;
             }
         }
         
-        async function saveToFileSystem() {
-            if (!fileHandle || !treeData) return false;
+        async function saveToFile() {
+            if (!fileHandle) return;
             
             try {
                 const writable = await fileHandle.createWritable();
-                const dataStr = JSON.stringify({
-                    trees: allTrees,
-                    activeTree: activeTreeId
-                }, null, 2);
-                
-                await writable.write(dataStr);
+                const data = JSON.stringify({ trees: allTrees, activeTree: activeTreeId }, null, 2);
+                await writable.write(data);
                 await writable.close();
                 
-                hasUnsavedChanges = false;
-                updateSaveStatus('💚 נשמר אוטומטית ' + new Date().toLocaleTimeString('he-IL'), 'success');
-                return true;
+                hasChanges = false;
+                const time = new Date().toLocaleTimeString('he-IL');
+                showAutoSaveStatus(`💚 נשמר ${time}`, 'success');
+                
             } catch (err) {
-                console.error('Save error:', err);
-                updateSaveStatus('❌ שגיאת שמירה - לחץ "שמור" ידנית!', 'error');
-                return false;
+                showAutoSaveStatus('❌ שגיאת שמירה!', 'error');
             }
         }
         
-        function startAutoSave() {
-            if (autoSaveInterval) clearInterval(autoSaveInterval);
-            
-            autoSaveInterval = setInterval(async () => {
-                if (hasUnsavedChanges && fileHandle) {
-                    await saveToFileSystem();
+        function startAutoSaveTimer() {
+            if (autoSaveTimer) clearInterval(autoSaveTimer);
+            autoSaveTimer = setInterval(() => {
+                if (hasChanges && fileHandle) {
+                    saveToFile();
                 }
-            }, 30000); // Save every 30 seconds if there are changes
+            }, 30000);
         }
         
-        function markUnsaved() {
-            hasUnsavedChanges = true;
-            if (!fileHandle) {
-                updateSaveStatus('⚠️ יש שינויים - לחץ "שמור"!', 'warning');
-            }
-        }
-        
-        function updateSaveStatus(text, type) {
-            const statusDiv = document.getElementById('saveStatus');
-            const statusText = document.getElementById('saveStatusText');
-            
-            if (!statusDiv || !statusText) return;
-            
-            statusText.textContent = text;
-            statusDiv.style.display = 'block';
+        function showAutoSaveStatus(text, type) {
+            const status = document.getElementById('autoSaveStatus');
+            status.textContent = text;
+            status.style.display = 'block';
             
             if (type === 'success') {
-                statusDiv.style.background = '#d4edda';
-                statusDiv.style.color = '#155724';
-                statusDiv.style.border = '2px solid #c3e6cb';
-            } else if (type === 'warning') {
-                statusDiv.style.background = '#fff3cd';
-                statusDiv.style.color = '#856404';
-                statusDiv.style.border = '2px solid #ffc107';
+                status.style.background = '#d4edda';
+                status.style.color = '#155724';
+                status.style.border = '2px solid #c3e6cb';
             } else if (type === 'error') {
-                statusDiv.style.background = '#f8d7da';
-                statusDiv.style.color = '#721c24';
-                statusDiv.style.border = '2px solid #f5c6cb';
+                status.style.background = '#f8d7da';
+                status.style.color = '#721c24';
+                status.style.border = '2px solid #f5c6cb';
             }
         }
         
-        // Intercept all data changes
-        const originalAutoSave = autoSave;
-        autoSave = function() {
-            markUnsaved();
-            originalAutoSave();
-            if (fileHandle) {
-                saveToFileSystem();
-            }
+        const originalAutoSave = window.autoSave;
+        window.autoSave = function() {
+            hasChanges = true;
+            if (originalAutoSave) originalAutoSave();
         };
         
-        // Warning before closing
         window.addEventListener('beforeunload', function(e) {
-            if (hasUnsavedChanges && !fileHandle) {
+            if (!fileHandle && hasChanges) {
                 e.preventDefault();
-                e.returnValue = '⚠️ יש שינויים שלא נשמרו! האם אתה בטוח שברצונך לצאת?';
+                e.returnValue = '⚠️ יש שינויים שלא נשמרו! האם לצאת?';
                 return e.returnValue;
             }
         });
         
-        // Ask to setup file system on first use
-        async function promptFileSystemSetup() {
-            if (localStorage.getItem('fileSystemPrompted')) return;
-            if (!('showDirectoryPicker' in window)) return;
-            
-            setTimeout(async () => {
-                const response = confirm(
-                    '🔐 שמירה אוטומטית!\n\n' +
-                    'האם תרצה לבחור תיקייה במחשב לשמירה אוטומטית?\n\n' +
-                    '✅ העץ ישמר אוטומטית כל 30 שניות\n' +
-                    '✅ לא תצטרך ללחוץ "שמור"\n' +
-                    '✅ הקובץ יהיה במחשב שלך\n\n' +
-                    'לחץ OK לבחירת תיקייה, או Cancel לשמירה ידנית'
-                );
-                
-                localStorage.setItem('fileSystemPrompted', 'true');
-                
-                if (response) {
-                    await setupFileSystemSave();
-                } else {
-                    updateSaveStatus('⚠️ זכור ללחוץ "שמור" לפני סגירה!', 'warning');
-                }
-            }, 2000);
-        }
-        
         // Load on page start
         window.addEventListener('DOMContentLoaded', function() {
             loadFromStorage();
-            setTimeout(showSaveReminder, 1000); // Show reminder after 1 second
-            promptFileSystemSetup();
+            setTimeout(showSaveReminder, 1000);
+            
+            if (localStorage.getItem('autoSaveEnabled') === 'true') {
+                document.getElementById('autoSaveBtn').textContent = '🔒 הפעל שמירה אוטומטית שוב';
+            }
         });
     </script>
 </body>
