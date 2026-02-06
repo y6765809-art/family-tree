@@ -2372,30 +2372,35 @@
         let hasChanges = false;
         
         async function setupAutoSave() {
-            if (!('showDirectoryPicker' in window)) {
-                alert('⚠️ הדפדפן שלך לא תומך בשמירה אוטומטית.\n\nהשתמש ב-Chrome או Edge, או לחץ "שמור" ידנית לפני סגירה.');
+            if (!('showSaveFilePicker' in window)) {
+                alert('⚠️ הדפדפן שלך לא תומך בשמירה אוטומטית.\n\nהשתמש ב-Chrome או Edge (גרסה 86+), או לחץ "שמור" ידנית לפני סגירה.');
                 return;
             }
             
             try {
-                const dirHandle = await window.showDirectoryPicker({
-                    mode: 'readwrite',
+                fileHandle = await window.showSaveFilePicker({
+                    suggestedName: 'yichus_tree.json',
+                    types: [{
+                        description: 'JSON Files',
+                        accept: { 'application/json': ['.json'] }
+                    }],
                     startIn: 'documents'
                 });
                 
-                fileHandle = await dirHandle.getFileHandle('yichus_tree.json', { create: true });
-                
                 document.getElementById('autoSaveBtn').textContent = '✅ שמירה אוטומטית פעילה';
                 document.getElementById('autoSaveBtn').style.background = '#28a745';
+                document.getElementById('autoSaveBtn').onclick = null;
                 
                 showAutoSaveStatus('💚 שמירה אוטומטית הופעלה!', 'success');
                 
+                localStorage.setItem('autoSaveEnabled', 'true');
                 startAutoSaveTimer();
                 await saveToFile();
                 
             } catch (err) {
                 if (err.name !== 'AbortError') {
-                    alert('שגיאה: ' + err.message);
+                    console.error('Auto-save error:', err);
+                    alert('שגיאה בהגדרת שמירה אוטומטית:\n' + err.message + '\n\nהשתמש בכפתור "שמור" הרגיל.');
                 }
             }
         }
