@@ -286,22 +286,22 @@
         
         .family-group {
             border: 1px dashed #8b7355;
-            border-radius: 8px;
-            padding: 12px 4px 4px 4px;
-            margin: 2px;
+            border-radius: 10px;
+            padding: 15px 8px 8px 8px;
+            margin: 5px;
             background: rgba(139, 115, 85, 0.03);
             position: relative;
         }
         
         .family-label {
             position: absolute;
-            top: -8px;
-            right: 10px;
+            top: -10px;
+            right: 15px;
             background: white;
-            padding: 1px 5px;
+            padding: 2px 8px;
             border: 1px solid #8b7355;
-            border-radius: 6px;
-            font-size: 9px;
+            border-radius: 8px;
+            font-size: 10px;
             font-weight: 600;
             color: #8b7355;
             white-space: nowrap;
@@ -335,8 +335,8 @@
         
         .children-row {
             display: flex;
-            gap: 2px;
-            margin: 1px 0;
+            gap: 10px;
+            margin-top: 5px;
             justify-content: center;
             flex-wrap: nowrap;
             min-width: max-content;
@@ -344,14 +344,14 @@
         
         .tree-node {
             background: linear-gradient(135deg, #fff9e6 0%, #ffffff 100%);
-            padding: 3px 6px;
-            border-radius: 4px;
+            padding: 8px 12px;
+            border-radius: 6px;
             border: 2px solid #d4af37;
             color: #2c1810;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             position: relative;
-            min-width: 100px;
-            max-width: 180px;
+            min-width: 140px;
+            max-width: 220px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
@@ -384,39 +384,30 @@
         .person-name {
             font-size: 13px;
             font-weight: 600;
-            margin: 0;
+            margin-bottom: 3px;
             line-height: 1.2;
         }
         
         .parent-info {
-            display: none !important;
+            font-size: 9px;
+            color: #888;
+            font-style: italic;
+            margin-bottom: 2px;
         }
         
         .person-years {
             font-size: 10px;
             color: #666;
-            margin: 1px 0 0 0;
+            margin-top: 3px;
             font-style: italic;
         }
         
         .person-description {
-            font-size: 9px;
+            font-size: 11px;
             color: #555;
-            margin: 1px 0 0 0;
-            padding-top: 1px;
+            margin-top: 4px;
+            padding-top: 4px;
             border-top: 1px solid #e0e0e0;
-            line-height: 1.2;
-        }
-        
-        .person-notes {
-            font-size: 8px;
-            color: #777;
-            margin: 1px 0 0 0;
-            padding: 2px;
-            background: rgba(0,0,0,0.03);
-            border-radius: 2px;
-            text-align: right;
-            line-height: 1.2;
             line-height: 1.3;
         }
         
@@ -492,9 +483,9 @@
         
         .connector-down {
             width: 2px;
-            height: 10px;
+            height: 15px;
             background: #8b7355;
-            margin: 2px auto 0 auto;
+            margin: 5px auto 0 auto;
             position: relative;
         }
         
@@ -547,99 +538,68 @@
         }
         
         @media print {
-            * {
-                print-color-adjust: exact;
-                -webkit-print-color-adjust: exact;
-                margin: 0 !important;
-                padding: 0 !important;
-            }
             body {
                 background: white;
-                margin: 0;
-                padding: 0;
-                overflow: hidden;
+                padding: 5px;
+                font-size: 10px;
             }
-            .header, .editor-panel, .settings-panel {
-                display: none !important;
+            .header, .editor-panel {
+                display: none;
             }
             .main-content {
                 grid-template-columns: 1fr;
-                padding: 0;
-                margin: 0;
-                width: 100%;
-                height: 100vh;
             }
             .tree-display {
                 box-shadow: none;
                 border: none;
-                padding: 0;
-                margin: 0;
-                overflow: hidden;
-                width: 100%;
-                height: 100%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-            #treeContainer {
-                transform: scale(0.4);
-                transform-origin: center center;
-                width: 250%;
-                height: 250%;
+                padding: 5px;
             }
             .tree-node {
-                padding: 2px 4px !important;
-                min-width: 60px !important;
-                max-width: 90px !important;
-                border-width: 0.5px !important;
+                padding: 4px 6px !important;
+                min-width: 100px !important;
+                max-width: 150px !important;
+                border-width: 1px !important;
                 box-shadow: none !important;
-                margin: 0 !important;
             }
             .person-name {
-                font-size: 9px !important;
-                margin: 0 !important;
-                line-height: 1 !important;
+                font-size: 10px !important;
+                margin-bottom: 2px !important;
             }
             .person-years {
-                font-size: 7px !important;
-                margin: 0 !important;
+                font-size: 8px !important;
+                margin-top: 2px !important;
             }
             .person-description {
-                font-size: 6px !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                border: none !important;
+                font-size: 8px !important;
+                margin-top: 2px !important;
+                padding-top: 2px !important;
             }
             .person-notes {
-                font-size: 6px !important;
-                padding: 0 !important;
-                margin: 0 !important;
-            }
-            .parent-info {
-                display: none !important;
+                font-size: 8px !important;
+                padding: 2px !important;
+                margin-top: 2px !important;
             }
             .children-row {
-                gap: 2px !important;
-                margin: 0 !important;
+                gap: 6px !important;
+                margin-top: 3px !important;
             }
             .family-group {
-                padding: 5px 2px 2px 2px !important;
-                margin: 1px !important;
-                border-width: 0.5px !important;
+                padding: 10px 5px 5px 5px !important;
+                margin: 3px !important;
+                border-width: 1px !important;
             }
             .family-label {
-                font-size: 6px !important;
-                padding: 0px 2px !important;
-                border-width: 0.5px !important;
+                font-size: 8px !important;
+                padding: 1px 5px !important;
+                border-width: 1px !important;
             }
             .connector-down {
-                height: 4px !important;
-                width: 0.5px !important;
-                margin: 1px auto !important;
+                height: 10px !important;
+                margin: 3px auto 0 auto !important;
             }
             @page {
                 size: A4 landscape;
-                margin: 5mm;
+                margin: 10mm;
             }
         }
     </style>
@@ -652,7 +612,6 @@
             <div class="controls">
                 <button class="btn" onclick="toggleTreeManager()">📁 ניהול עצים</button>
                 <button class="btn btn-export" onclick="showPDFSettings()">📄 ייצא PDF</button>
-                <button class="btn" onclick="toggleNamesList()">👥 רשימת שמות</button>
                 <button class="btn btn-settings" onclick="toggleSettings()">⚙️ הגדרות</button>
                 <button class="btn" onclick="saveToJSON()">💾 שמור</button>
                 <button class="btn" onclick="loadFromJSON()">📂 טען</button>
@@ -694,24 +653,22 @@
             
             <div id="pdfSettingsPanel" class="settings-panel" style="display: none;">
                 <h3>📄 בחר מצב ייצוא PDF</h3>
-                <div style="background: #fffacd; padding: 10px; border-radius: 5px; margin-bottom: 15px; text-align: center; border: 2px solid #ffc107;">
-                    <strong>⚠️ חשוב:</strong> כל העץ יוקטן כדי להיכנס בעמוד אחד!
-                </div>
                 
                 <input type="hidden" id="pdfExportMode" value="print">
                 
                 <div class="pdf-mode-card selected" data-mode="print" onclick="selectPDFMode('print')">
-                    <h4>🖨️ הדפסה רגילה</h4>
-                    <p><strong>→ יוצר קובץ A4 אלבומי אחד</strong><br>
-                    העץ מוקטן אוטומטית כדי להיכנס בעמוד<br>
-                    מתאים להדפסה ביתית</p>
+                    <h4>🖨️ מדפסת (A4/A3)</h4>
+                    <p>מתאים להדפסה רגילה - רזולוציה גבוהה</p>
                 </div>
                 
                 <div class="pdf-mode-card" data-mode="poster" onclick="selectPDFMode('poster')">
-                    <h4>🏭 פוסטר גדול</h4>
-                    <p><strong>→ יוצר קובץ ענק (לפי גודל העץ)</strong><br>
-                    העץ בגודל מלא, איכות מקסימלית<br>
-                    מתאים להדפסה מקצועית</p>
+                    <h4>🏭 דפוס (A0 פוסטר)</h4>
+                    <p>עמוד אחד גדול ברזולוציה מאוד גבוהה + שוליים 20 מ"מ</p>
+                </div>
+                
+                <div class="pdf-mode-card" data-mode="screen" onclick="selectPDFMode('screen')">
+                    <h4>🖼️ מסך (Full-Size)</h4>
+                    <p>גודל מותאם אישית לפי העץ + שוליים 20 מ"מ</p>
                 </div>
                 
                 <div style="margin-top: 20px; display: flex; gap: 10px;">
@@ -721,43 +678,6 @@
                     <button class="btn" onclick="closePDFSettings()" style="flex: 1; background: #666;">
                         ביטול
                     </button>
-                </div>
-            </div>
-            
-            <div id="namesListPanel" class="settings-panel" style="display: none;">
-                <h3>👥 רשימת כל השמות</h3>
-                
-                <div style="margin-bottom: 15px;">
-                    <input type="text" id="nameSearch" placeholder="🔍 חיפוש שם..." 
-                           oninput="filterNames()" 
-                           style="width: 100%; padding: 10px; border: 2px solid #d4af37; border-radius: 8px; font-size: 16px; font-family: inherit;">
-                </div>
-                
-                <div style="display: flex; gap: 10px; margin-bottom: 15px; justify-content: center;">
-                    <button class="btn" onclick="filterByGender('all')" id="filterAll" style="flex: 1; background: #4CAF50;">
-                        ⚥ כולם
-                    </button>
-                    <button class="btn" onclick="filterByGender('male')" id="filterMale" style="flex: 1;">
-                        ♂ גברים
-                    </button>
-                    <button class="btn" onclick="filterByGender('female')" id="filterFemale" style="flex: 1;">
-                        ♀ נשים
-                    </button>
-                </div>
-                
-                <div style="margin-bottom: 10px; text-align: center;">
-                    <select id="sortOrder" onchange="updateNamesList()" style="padding: 8px; border: 2px solid #d4af37; border-radius: 8px; font-size: 14px; font-family: inherit;">
-                        <option value="alpha">📊 אלפביתי (א-ת)</option>
-                        <option value="generation">📅 לפי דורות</option>
-                    </select>
-                </div>
-                
-                <div id="namesListContainer" style="max-height: 400px; overflow-y: auto; background: white; padding: 15px; border-radius: 8px; border: 2px solid #d4af37;">
-                    <p style="text-align: center; color: #999;">טוען...</p>
-                </div>
-                
-                <div style="margin-top: 10px; text-align: center; font-size: 14px; color: #666;">
-                    <span id="namesCount">0 שמות</span>
                 </div>
             </div>
             
@@ -1076,169 +996,8 @@
         function toggleSettings() {
             const panel = document.getElementById('settingsPanel');
             const pdfPanel = document.getElementById('pdfSettingsPanel');
-            const namesPanel = document.getElementById('namesListPanel');
             panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
             pdfPanel.style.display = 'none';
-            namesPanel.style.display = 'none';
-        }
-        
-        function toggleNamesList() {
-            if (!treeData) {
-                alert('אין עץ להציג');
-                return;
-            }
-            const panel = document.getElementById('namesListPanel');
-            const settingsPanel = document.getElementById('settingsPanel');
-            const pdfPanel = document.getElementById('pdfSettingsPanel');
-            
-            const isVisible = panel.style.display === 'block';
-            panel.style.display = isVisible ? 'none' : 'block';
-            settingsPanel.style.display = 'none';
-            pdfPanel.style.display = 'none';
-            
-            if (!isVisible) {
-                updateNamesList();
-            }
-        }
-        
-        let currentGenderFilter = 'all';
-        
-        function filterByGender(gender) {
-            currentGenderFilter = gender;
-            
-            // Update button styles
-            document.getElementById('filterAll').style.background = gender === 'all' ? '#4CAF50' : '#8b7355';
-            document.getElementById('filterMale').style.background = gender === 'male' ? '#4CAF50' : '#8b7355';
-            document.getElementById('filterFemale').style.background = gender === 'female' ? '#4CAF50' : '#8b7355';
-            
-            updateNamesList();
-        }
-        
-        function collectAllNames(node, names = [], generation = 0) {
-            if (!node) return names;
-            
-            // Determine gender from relation or name
-            let gender = 'unknown';
-            const relation = node.relation || '';
-            const name = node.name || '';
-            
-            if (relation.includes('אבא') || relation.includes('סבא') || relation.includes('בן')) {
-                gender = 'male';
-            } else if (relation.includes('אמא') || relation.includes('סבתא') || relation.includes('בת') || name.includes('רחל') || name.includes('שרה') || name.includes('מרים') || name.includes('לאה') || name.includes('דבורה') || name.includes('חנה')) {
-                gender = 'female';
-            }
-            
-            names.push({
-                name: node.name,
-                relation: node.relation || (node.isCurrent ? 'דור נוכחי' : ''),
-                gender: gender,
-                generation: generation,
-                id: node.id,
-                isCurrent: node.isCurrent || false
-            });
-            
-            // Collect from parents (higher generation)
-            if (node.parents) {
-                node.parents.forEach(parent => collectAllNames(parent, names, generation + 1));
-            }
-            
-            // Collect from children (lower generation)
-            if (node.children) {
-                node.children.forEach(child => collectAllNames(child, names, generation - 1));
-            }
-            
-            // Collect from spouse
-            if (node.spouse) {
-                collectAllNames(node.spouse, names, generation);
-            }
-            
-            return names;
-        }
-        
-        function updateNamesList() {
-            const container = document.getElementById('namesListContainer');
-            const sortOrder = document.getElementById('sortOrder').value;
-            const searchTerm = document.getElementById('nameSearch').value.toLowerCase();
-            
-            // Collect all names
-            let allNames = collectAllNames(treeData);
-            
-            // Remove duplicates
-            allNames = allNames.filter((name, index, self) =>
-                index === self.findIndex(n => n.name === name.name)
-            );
-            
-            // Filter by gender
-            if (currentGenderFilter !== 'all') {
-                allNames = allNames.filter(person => person.gender === currentGenderFilter);
-            }
-            
-            // Filter by search
-            if (searchTerm) {
-                allNames = allNames.filter(person => 
-                    person.name.toLowerCase().includes(searchTerm)
-                );
-            }
-            
-            // Sort
-            if (sortOrder === 'alpha') {
-                allNames.sort((a, b) => a.name.localeCompare(b.name, 'he'));
-            } else {
-                // Sort by generation (oldest first)
-                allNames.sort((a, b) => b.generation - a.generation);
-            }
-            
-            // Update count
-            document.getElementById('namesCount').textContent = `${allNames.length} שמות`;
-            
-            // Render list
-            if (allNames.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: #999;">לא נמצאו שמות</p>';
-                return;
-            }
-            
-            let html = '<div style="display: flex; flex-direction: column; gap: 8px;">';
-            
-            allNames.forEach(person => {
-                const genderIcon = person.gender === 'male' ? '♂' : person.gender === 'female' ? '♀' : '•';
-                const highlight = person.isCurrent ? 'background: #fffacd; border-right: 4px solid #d4af37;' : '';
-                
-                html += `
-                    <div style="padding: 10px; border: 1px solid #e0e0e0; border-radius: 6px; cursor: pointer; transition: all 0.2s; ${highlight}"
-                         onmouseover="this.style.background='#f9f9f9'" 
-                         onmouseout="this.style.background='${person.isCurrent ? '#fffacd' : 'white'}'"
-                         onclick="selectNodeFromList(${person.id})">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <strong style="font-size: 16px;">${genderIcon} ${person.name}</strong>
-                                ${person.relation ? `<div style="font-size: 12px; color: #666; margin-top: 3px;">${person.relation}</div>` : ''}
-                            </div>
-                            ${sortOrder === 'generation' ? `<span style="font-size: 11px; color: #999; background: #f0f0f0; padding: 3px 8px; border-radius: 4px;">דור ${person.generation >= 0 ? '+' + person.generation : person.generation}</span>` : ''}
-                        </div>
-                    </div>
-                `;
-            });
-            
-            html += '</div>';
-            container.innerHTML = html;
-        }
-        
-        function selectNodeFromList(nodeId) {
-            // Close the panel
-            document.getElementById('namesListPanel').style.display = 'none';
-            
-            // Select the node
-            selectNode(nodeId);
-            
-            // Scroll to view if needed
-            const selectedNode = document.querySelector(`.tree-node[onclick="selectNode(${nodeId})"]`);
-            if (selectedNode) {
-                selectedNode.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        }
-        
-        function filterNames() {
-            updateNamesList();
         }
         
         function showPDFSettings() {
@@ -2010,31 +1769,19 @@
             
             // Show instructions
             const instructions = `
-                <div style="text-align: center; padding: 30px; max-width: 600px; font-family: inherit;">
-                    <div style="font-size: 48px; margin-bottom: 20px;">☁️</div>
-                    <h2 style="color: #2c1810; margin-bottom: 20px;">גיבוי לגוגל דרייב</h2>
-                    <div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 10px; padding: 20px; margin-bottom: 20px; text-align: right;">
-                        <strong>⚠️ חשוב:</strong> זה לא העלאה אוטומטית!<br>
-                        הקובץ יורד למחשב ואתה מעלה אותו ידנית לדרייב.
-                    </div>
-                    <div style="text-align: right; line-height: 2; margin-bottom: 20px;">
-                        <strong>שלבים:</strong><br>
-                        1️⃣ הקובץ <strong>יורד עכשיו</strong> למחשב שלך<br>
-                        2️⃣ פתח את <a href="https://drive.google.com" target="_blank" style="color: #4285f4; font-weight: bold;">Google Drive</a><br>
-                        3️⃣ לחץ "חדש" → "העלאת קובץ"<br>
-                        4️⃣ בחר את הקובץ שהורדת<br>
-                        5️⃣ ✅ הקובץ נשמר בענן!
-                    </div>
-                    <div style="display: flex; gap: 10px; justify-content: center;">
-                        <button onclick="window.open('https://drive.google.com', '_blank')" 
-                                style="background: #4285f4; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold;">
-                            🌐 פתח Google Drive
-                        </button>
-                        <button onclick="document.querySelector('#driveModal').remove(); document.querySelector('#driveOverlay').remove();" 
-                                style="background: #4CAF50; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold;">
-                            ✅ הבנתי
-                        </button>
-                    </div>
+                <div style="text-align: right; padding: 20px; max-width: 500px;">
+                    <h3>📤 העלאה לגוגל דרייב</h3>
+                    <p>כדי לשמור לגוגל דרייב:</p>
+                    <ol style="text-align: right;">
+                        <li>הקובץ יורד למחשב שלך</li>
+                        <li>לך ל-<a href="https://drive.google.com" target="_blank">Google Drive</a></li>
+                        <li>לחץ "העלאה חדשה" ← "קובץ"</li>
+                        <li>בחר את הקובץ שהורדת</li>
+                    </ol>
+                    <button onclick="document.querySelector('#driveModal').remove(); document.querySelector('#driveOverlay').remove();" 
+                            style="background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 15px;">
+                        הבנתי
+                    </button>
                 </div>
             `;
             
@@ -2123,107 +1870,55 @@
             if (selected) selected.classList.remove('selected');
             
             if (mode === 'print') {
-                // Mode 1: Smart Print - captures entire tree, fits to page
-                const treeContainer = document.getElementById('treeContainer');
+                // Mode 1: Print (A4)
+                const opt = {
+                    margin: 10,
+                    filename: 'yichus_tree.pdf',
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 3, useCORS: true },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+                };
                 
-                // Get actual tree dimensions
-                const treeWidth = treeContainer.scrollWidth;
-                const treeHeight = treeContainer.scrollHeight;
-                
-                // Calculate scale to fit A4 landscape (297mm x 210mm = ~1122px x 794px at 96dpi)
-                const a4Width = 1122;
-                const a4Height = 794;
-                const scaleX = a4Width / treeWidth;
-                const scaleY = a4Height / treeHeight;
-                const scale = Math.min(scaleX, scaleY, 1) * 0.95; // 95% to add small margin
-                
-                // Capture with html2canvas
-                html2canvas(treeContainer, {
-                    scale: 2,
-                    backgroundColor: '#ffffff',
-                    useCORS: true,
-                    logging: false,
-                    width: treeWidth,
-                    height: treeHeight
-                }).then(canvas => {
-                    const imgData = canvas.toDataURL('image/jpeg', 0.95);
-                    
-                    // Create PDF with A4 landscape
-                    const pdf = new jspdf.jsPDF({
-                        orientation: 'landscape',
-                        unit: 'mm',
-                        format: 'a4'
-                    });
-                    
-                    // Calculate dimensions to fit in A4
-                    const pdfWidth = 297 - 10; // A4 width - margins
-                    const pdfHeight = 210 - 10; // A4 height - margins
-                    
-                    // Calculate image size maintaining aspect ratio
-                    const imgAspect = canvas.width / canvas.height;
-                    const pdfAspect = pdfWidth / pdfHeight;
-                    
-                    let finalWidth, finalHeight, xOffset, yOffset;
-                    
-                    if (imgAspect > pdfAspect) {
-                        // Image is wider - fit to width
-                        finalWidth = pdfWidth;
-                        finalHeight = pdfWidth / imgAspect;
-                        xOffset = 5;
-                        yOffset = (210 - finalHeight) / 2;
-                    } else {
-                        // Image is taller - fit to height
-                        finalHeight = pdfHeight;
-                        finalWidth = pdfHeight * imgAspect;
-                        xOffset = (297 - finalWidth) / 2;
-                        yOffset = 5;
-                    }
-                    
-                    pdf.addImage(imgData, 'JPEG', xOffset, yOffset, finalWidth, finalHeight);
-                    pdf.save('yichus_tree_A4.pdf');
-                    
-                    restoreUI();
-                }).catch(err => {
-                    console.error('PDF Export Error:', err);
-                    alert('שגיאה בייצוא PDF');
+                html2pdf().set(opt).from(element).save().then(() => {
                     restoreUI();
                 });
                 
             } else if (mode === 'poster') {
-                // Mode 2: Large Poster - full resolution
-                const treeContainer = document.getElementById('treeContainer');
+                // Mode 2: Poster (A0)
+                html2canvas(element, { scale: 4, backgroundColor: '#ffffff', useCORS: true }).then(canvas => {
+                    const imgData = canvas.toDataURL('image/png');
+                    const pdf = new jspdf.jsPDF({
+                        orientation: 'landscape',
+                        unit: 'mm',
+                        format: [1189, 841]
+                    });
+                    
+                    const pdfWidth = 1189 - 40;
+                    const pdfHeight = 841 - 40;
+                    pdf.addImage(imgData, 'PNG', 20, 20, pdfWidth, pdfHeight);
+                    pdf.save('yichus_tree_poster.pdf');
+                    
+                    restoreUI();
+                });
                 
-                html2canvas(treeContainer, { 
-                    scale: 3,
-                    backgroundColor: '#ffffff',
-                    useCORS: true,
-                    logging: false
-                }).then(canvas => {
+            } else if (mode === 'screen') {
+                // Mode 3: Screen (Full-Size)
+                html2canvas(element, { scale: 3, backgroundColor: '#ffffff', useCORS: true }).then(canvas => {
                     const imgData = canvas.toDataURL('image/png');
                     const imgWidth = canvas.width;
                     const imgHeight = canvas.height;
                     
-                    // Convert pixels to mm (assuming 96 DPI)
-                    const mmWidth = (imgWidth * 25.4) / 96;
-                    const mmHeight = (imgHeight * 25.4) / 96;
-                    
-                    // Create PDF with exact image size
                     const pdf = new jspdf.jsPDF({
-                        orientation: mmWidth > mmHeight ? 'landscape' : 'portrait',
-                        unit: 'mm',
-                        format: [mmWidth, mmHeight]
+                        orientation: imgWidth > imgHeight ? 'landscape' : 'portrait',
+                        unit: 'px',
+                        format: [imgWidth + 40, imgHeight + 40]
                     });
                     
-                    pdf.addImage(imgData, 'PNG', 0, 0, mmWidth, mmHeight);
-                    pdf.save('yichus_tree_poster.pdf');
+                    pdf.addImage(imgData, 'PNG', 20, 20, imgWidth, imgHeight);
+                    pdf.save('yichus_tree_fullsize.pdf');
                     
                     restoreUI();
-                }).catch(err => {
-                    console.error('PDF Export Error:', err);
-                    alert('שגיאה בייצוא PDF');
-                    restoreUI();
                 });
-                
             }
             
             function restoreUI() {
