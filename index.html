@@ -762,6 +762,15 @@
                 <div style="margin-top: 10px; text-align: center; font-size: 14px; color: #666;">
                     <span id="namesCount">0 שמות</span>
                 </div>
+                
+                <div style="margin-top: 15px; text-align: center;">
+                    <button class="btn btn-export" onclick="printNamesList()" style="width: 100%; font-size: 16px; padding: 12px;">
+                        🖨️ הדפס רשימה
+                    </button>
+                    <p style="font-size: 12px; color: #666; margin-top: 5px;">
+                        הדפסת הרשימה עם הסינון והסידור הנוכחיים
+                    </p>
+                </div>
             </div>
             
             <div class="instructions">
@@ -1242,6 +1251,55 @@
         
         function filterNames() {
             updateNamesList();
+        }
+        
+        function printNamesList() {
+            const sortOrder = document.getElementById('sortOrder').value;
+            const sortText = sortOrder === 'alpha' ? 'אלפביתי (א-ת)' : 'לפי דורות';
+            let genderText = 'כולם';
+            if (currentGenderFilter === 'male') genderText = 'גברים בלבד';
+            if (currentGenderFilter === 'female') genderText = 'נשים בלבד';
+            
+            let allNames = collectAllNames(treeData);
+            allNames = allNames.filter((name, index, self) =>
+                index === self.findIndex(n => n.name === name.name)
+            );
+            if (currentGenderFilter !== 'all') {
+                allNames = allNames.filter(person => person.gender === currentGenderFilter);
+            }
+            const searchTerm = document.getElementById('nameSearch').value.toLowerCase();
+            if (searchTerm) {
+                allNames = allNames.filter(person => person.name.toLowerCase().includes(searchTerm));
+            }
+            if (sortOrder === 'alpha') {
+                allNames.sort((a, b) => a.name.localeCompare(b.name, 'he'));
+            } else {
+                allNames.sort((a, b) => b.generation - a.generation);
+            }
+            
+            const printWindow = window.open('', '_blank');
+            let html = `<!DOCTYPE html><html dir="rtl" lang="he"><head><meta charset="UTF-8"><title>רשימת עץ יוחסין</title><style>
+@import url('https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;700&display=swap');
+body{font-family:'Frank Ruhl Libre',serif;padding:20mm;background:white}
+h1{text-align:center;color:#2c1810;border-bottom:3px solid #d4af37;padding-bottom:15px;margin-bottom:20px}
+.filters{background:#f9f9f9;padding:15px;border-radius:8px;margin-bottom:20px;text-align:center;border:2px solid #d4af37}
+.name-item{padding:10px;border-bottom:1px solid #e0e0e0;display:flex;justify-content:space-between;align-items:center}
+.name-main{font-size:16px;font-weight:600}
+.name-relation{font-size:13px;color:#666;margin-top:3px}
+.generation-badge{background:#f0f0f0;padding:5px 10px;border-radius:5px;font-size:12px;color:#666}
+.total{text-align:center;margin-top:20px;font-size:18px;font-weight:bold;color:#2c1810}
+@media print{body{padding:10mm}}
+</style></head><body><h1>🌳 רשימת עץ יוחסין 🌳</h1>
+<div class="filters"><strong>סינון:</strong> ${genderText} | <strong>סידור:</strong> ${sortText}${searchTerm ? ` | <strong>חיפוש:</strong> "${searchTerm}"` : ''}</div><div class="names-list">`;
+            
+            allNames.forEach((person, index) => {
+                const genderIcon = person.gender === 'male' ? '♂' : person.gender === 'female' ? '♀' : '•';
+                html += `<div class="name-item"><div><div class="name-main">${index + 1}. ${genderIcon} ${person.name}</div>${person.relation ? `<div class="name-relation">${person.relation}</div>` : ''}</div>${sortOrder === 'generation' ? `<div class="generation-badge">דור ${person.generation >= 0 ? '+' + person.generation : person.generation}</div>` : ''}</div>`;
+            });
+            
+            html += `</div><div class="total">סה"כ: ${allNames.length} שמות</div><script>window.onload=function(){window.print()};</script></body></html>`;
+            printWindow.document.write(html);
+            printWindow.document.close();
         }
         
         function showPDFSettings() {
