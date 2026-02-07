@@ -654,11 +654,14 @@
                 <button class="btn btn-export" onclick="showPDFSettings()">📄 ייצא PDF</button>
                 <button class="btn" onclick="toggleNamesList()">👥 רשימת שמות</button>
                 <button class="btn btn-settings" onclick="toggleSettings()">⚙️ הגדרות</button>
+                <button class="btn" id="autoSaveBtn" onclick="setupAutoSave()" style="background: #4CAF50; font-weight: bold;">🔒 הפעל שמירה אוטומטית</button>
                 <button class="btn" onclick="saveToJSON()">💾 שמור</button>
                 <button class="btn" onclick="loadFromJSON()">📂 טען</button>
                 <button class="btn" onclick="saveToGoogleDrive()" title="שמור לגוגל דרייב">☁️ שמור לדרייב</button>
                 <button class="btn btn-clear" onclick="clearTree()">🗑️ נקה</button>
             </div>
+            
+            <div id="autoSaveStatus" style="display: none; text-align: center; padding: 10px; margin: 10px auto; max-width: 600px; border-radius: 8px; font-weight: bold;"></div>
             
             
             <div id="treeManagerPanel" class="settings-panel" style="display: none;">
@@ -2361,10 +2364,119 @@
             }
         }
         
+        // ========================================
+        // AUTO-SAVE SYSTEM
+        // ========================================
+        let fileHandle = null;
+        let autoSaveTimer = null;
+        let unsavedChanges = false;
+        
+        async function setupAutoSave() {
+            if (!('showSaveFilePicker' in window)) {
+                alert('⚠️ השמירה האוטומטית דורשת Chrome או Edge (גרסה 86+).\n\nאתה יכול להשתמש בכפתור "💾 שמור" הרגיל.');
+                return;
+            }
+            
+            try {
+                fileHandle = await window.showSaveFilePicker({
+                    suggestedName: 'yichus_tree.json',
+                    types: [{
+                        description: 'JSON Files',
+                        accept: { 'application/json': ['.json'] }
+                    }],
+                    startIn: 'documents'
+                });
+                
+                const btn = document.getElementById('autoSaveBtn');
+                btn.textContent = '✅ שמירה אוטומטית פעילה';
+                btn.style.background = '#28a745';
+                btn.onclick = null;
+                
+                showStatus('💚 שמירה אוטומטית הופעלה! הקובץ יתעדכן כל 30 שניות.', 'success');
+                
+                startAutoSaveTimer();
+                await saveToFile();
+                
+            } catch (err) {
+                if (err.name !== 'AbortError') {
+                    console.error('Auto-save setup error:', err);
+                    showStatus('❌ שגיאה בהגדרת שמירה אוטומטית. השתמש בכפתור "שמור" הרגיל.', 'error');
+                }
+            }
+        }
+        
+        async function saveToFile() {
+            if (!fileHandle) return;
+            
+            try {
+                const writable = await fileHandle.createWritable();
+                const data = JSON.stringify({
+                    trees: allTrees,
+                    activeTree: activeTreeId
+                }, null, 2);
+                
+                await writable.write(data);
+                await writable.close();
+                
+                unsavedChanges = false;
+                const time = new Date().toLocaleTimeString('he-IL');
+                showStatus(`💚 נשמר אוטומטית ${time}`, 'success');
+                
+            } catch (err) {
+                console.error('Auto-save error:', err);
+                showStatus('❌ שגיאת שמירה! לחץ "💾 שמור" ידנית.', 'error');
+            }
+        }
+        
+        function startAutoSaveTimer() {
+            if (autoSaveTimer) clearInterval(autoSaveTimer);
+            autoSaveTimer = setInterval(async () => {
+                if (unsavedChanges && fileHandle) {
+                    await saveToFile();
+                }
+            }, 30000);
+        }
+        
+        function showStatus(text, type) {
+            const status = document.getElementById('autoSaveStatus');
+            if (!status) return;
+            
+            status.textContent = text;
+            status.style.display = 'block';
+            
+            if (type === 'success') {
+                status.style.background = '#d4edda';
+                status.style.color = '#155724';
+                status.style.border = '2px solid #c3e6cb';
+            } else if (type === 'error') {
+                status.style.background = '#f8d7da';
+                status.style.color = '#721c24';
+                status.style.border = '2px solid #f5c6cb';
+            }
+        }
+        
+        // Wrap autoSave to track changes
+        (function() {
+            const originalAutoSave = autoSave;
+            autoSave = function() {
+                unsavedChanges = true;
+                originalAutoSave.apply(this, arguments);
+            };
+        })();
+        
+        // Warning before closing if no auto-save
+        window.addEventListener('beforeunload', function(e) {
+            if (!fileHandle && unsavedChanges && treeData) {
+                e.preventDefault();
+                e.returnValue = '⚠️ יש שינויים שלא נשמרו! לחץ "שמור" לפני סגירה.';
+                return e.returnValue;
+            }
+        });
+        
         // Load on page start
         window.addEventListener('DOMContentLoaded', function() {
             loadFromStorage();
-            setTimeout(showSaveReminder, 1000); // Show reminder after 1 second
+            setTimeout(showSaveReminder, 1000);
         });
     </script>
 </body>
